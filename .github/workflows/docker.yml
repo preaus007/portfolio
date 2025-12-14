@@ -1,20 +1,30 @@
-name: CI/CD for Portfolio
+name: Deploy Portfolio to GitHub Pages
 
 on:
   push:
     branches:
       - main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Build Docker image
-        run: docker build -t my-portfolio .
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
 
-      - name: Run Docker container (test)
-        run: docker run -d -p 8080:80 my-portfolio
-      
+      - name: Upload files
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
